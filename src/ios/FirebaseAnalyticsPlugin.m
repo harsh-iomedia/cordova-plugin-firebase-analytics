@@ -8,9 +8,12 @@
 - (void)pluginInitialize {
     NSLog(@"Starting Firebase Analytics plugin");
 
-    if(![FIRApp defaultApp]) {
-        [FIRApp configure];
-    }
+    // Get the path for Google-Service-Info.plist
+    NSString * filePath =[[NSBundle mainBundle] pathForResource:@"GoogleService-Info" ofType: @"plist"];
+    
+    // Init FIRApp passing the file
+    FIROptions * options =[[FIROptions alloc] initWithContentsOfFile: filePath];
+    [FIRApp configureWithOptions: options];
 }
 
 - (void)logEvent:(CDVInvokedUrlCommand *)command {
@@ -45,7 +48,7 @@
 - (void)setEnabled:(CDVInvokedUrlCommand *)command {
     bool enabled = [[command.arguments objectAtIndex:0] boolValue];
 
-    [FIRAnalytics setAnalyticsCollectionEnabled:enabled];
+//    [FIRAnalytics setAnalyticsCollectionEnabled:enabled];
 
     CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
